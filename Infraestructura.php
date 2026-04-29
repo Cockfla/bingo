@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/interface.php';
+require_once __DIR__ . '/Premios.php';
 
 // ===============================
 // ⚙️ Generador de números sin repetir
@@ -39,6 +40,8 @@ class GeneradorAleatorioSinRepetir implements GeneradorNumeros
 // ===============================
 class Menu
 {
+    private float $montoPozo = 0;
+
     // ------------------------------------------------
     // Punto de entrada
     // ------------------------------------------------
@@ -49,6 +52,9 @@ class Menu
         $jugadores  = $this->configurarJugadores();
         $estrategia = $this->elegirEstrategia();
         $modo       = $this->elegirModo();
+
+        $montoStr         = $this->leer('Monto del pozo (ej: 10000): ');
+        $this->montoPozo  = max(0, (float) $montoStr);
 
         $bingo = (new ConstructorBingo())
             ->setJugadores($jugadores)
@@ -177,6 +183,28 @@ class Menu
         echo PHP_EOL . '--- Cartones al terminar ---' . PHP_EOL;
         foreach ($bingo->obtenerJugadores() as $jugador) {
             $jugador->mostrarCartones();
+        }
+
+        // --- Premios ---
+        if ($this->montoPozo > 0 && !empty($ganadores)) {
+            $pozo    = new Pozo($this->montoPozo);
+            $sistema = new PremioCartonLleno(
+                new PremioSegundoGanador(
+                    new PremioPrimerGanador(new PremioBase($pozo))
+                )
+            );
+
+            $nombres      = array_map(fn($j) => $j->getNombre(), $ganadores);
+            $distribucion = $sistema->otorgar(['primer' => $nombres]);
+
+            echo PHP_EOL . '--- Premios (pozo $' . $this->montoPozo . ') ---' . PHP_EOL;
+            if (empty($distribucion)) {
+                echo 'No se distribuyeron premios.' . PHP_EOL;
+            } else {
+                foreach ($distribucion as $nombre => $monto) {
+                    echo "  {$nombre}: \${$monto}" . PHP_EOL;
+                }
+            }
         }
 
         $this->separador();
