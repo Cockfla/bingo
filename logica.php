@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/interface.php';
+
 //Logica Ganador Linea (Strategy)
 
 class EstrategiaLinea implements EstrategiaGanador, ComponenteEstrategia {

@@ -1,7 +1,6 @@
 <?php
-interface ComponenteEstrategia {
-    public function esGanador(array $carton, array $numerosMarcados): bool;
-}
+
+require_once __DIR__ . '/interface.php';
 
 class Pozo {
     private $total = 0;
@@ -20,26 +19,6 @@ class Pozo {
 
     public function reiniciar(): void {
         $this->total = 0;
-    }
-}
-
-// 1 linea
-class EstrategiaLinea implements ComponenteEstrategia {
-    public function esGanador(array $carton, array $numerosMarcados): bool {
-        foreach ($carton as $fila) {
-            if (count(array_intersect($fila, $numerosMarcados)) === count($fila)) {
-                return true;
-            }
-        }
-        return false;
-    }
-}
-
-// carton lleno 
-class EstrategiaCartonLleno implements ComponenteEstrategia {
-    public function esGanador(array $carton, array $numerosMarcados): bool {
-        $todos = array_merge(...$carton);
-        return count(array_intersect($todos, $numerosMarcados)) === count($todos);
     }
 }
 

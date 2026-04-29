@@ -1,4 +1,7 @@
 <?php
+
+require_once __DIR__ . '/interface.php';
+
 /*
 interface CartonFactory
 {

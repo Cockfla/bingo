@@ -1,5 +1,8 @@
 <?php
 
+require_once __DIR__ . '/interface.php';
+require_once __DIR__ . '/Carton.php';
+
 /*interface Observador
 {
     public function actualizar(int $numero): void;

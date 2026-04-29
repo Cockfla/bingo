@@ -50,6 +50,7 @@ interface ComponenteEstrategia {
 interface BingoBuilder {
     public function setJugadores(array $jugadores): self;
     public function setEstrategia(EstrategiaGanador $estrategia): self;
+    public function setGenerador(GeneradorNumeros $generador): self;
     public function build();
 }
 

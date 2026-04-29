@@ -137,13 +137,11 @@ class Bingo implements Sujeto
 		$ganadores = [];
 
 		foreach ($this->jugadores as $jugador) {
-			foreach ($this->obtenerCartonesDeJugador($jugador) as $carton) {
-				[$datosCarton, $numerosMarcados] = $this->normalizarCarton($carton);
-
-				if ($this->estrategia->esGanador($datosCarton, $numerosMarcados)) {
-					$ganadores[] = $jugador;
-					break;
-				}
+			if (
+				method_exists($jugador, 'tieneCartonGanador')
+				&& $jugador->tieneCartonGanador($this->estrategia)
+			) {
+				$ganadores[] = $jugador;
 			}
 		}
 
